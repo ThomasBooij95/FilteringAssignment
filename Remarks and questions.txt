@@ -1,0 +1,3 @@
+Questions:
+- Is s(k)   a distance measure on the SH-senor in meters or as slopes of the wavefront in degrees?
+- Is Phi(k) a distance measure of height of the wavefront in meters? Or is it another value?
