@@ -1,0 +1,15 @@
+clear all
+close all
+clc
+
+load turbulenceData.mat
+load systemMatrices.mat
+
+%%
+%3.1
+rk=rank(G)
+maxrk=min(size(G))
+if rk ==
+
+
+%[ sigma ] = AOloop_nocontrol(phiIdent{1},SNR,H,G)
