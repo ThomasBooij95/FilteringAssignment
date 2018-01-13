@@ -20,9 +20,10 @@ extra info: the reference chapters 2 till 4 are about linear least-squares probl
 
 
 Solution direction: 
-Find Phi(k) by minimizing epsilon in the equation s(k) = G*phi(k) + e(k). The solution is gives as Phi_hat = (G^t*G)^-1 *G^T*s(k).
+Find Phi(k) by minimizing epsilon in the equation s(k) = G*phi(k). The solution is gives as Phi_hat = V_1 \sigma U_1^T s(k).
 
-Page 118 in the book states something about uniqueness of the solution: "When P (or its square root S) is not full rank, the weighted least-squaresproblem (4.24) no longer has a unique solution." Where P is the covariance matrix of the variable  when the problem is a stochastic LLS problem. I don't think this is the case right now. 
+On page 34 a solution is provided with single value decomposition. The solution is not unique as matrix G is not full rank and the linearly dependent columns can be chosen arbitrarily as long as they are still dependent, and the method would provide the same solution.
+%Page 118 in the book states something about uniqueness of the solution: "When P (or its square root S) is not full rank, the weighted least-squaresproblem (4.24) no longer has a unique solution." Where P is the covariance matrix of the variable  when the problem is a stochastic LLS problem. I don't think this is the case right now. 
 
 Remarks: 
 What kind of Least-squares problem is this? Since no prior statistical knowledge is assumed in this question, should we assume Phi(k) to be deterministic and therefor this problem as a linear-least-squares problem?

@@ -19,12 +19,13 @@ end
 
 %Single value decomp
 [U,S,V] = svd(G);
-SumSV=S(1:49,1:49);
+SumSV=S(1:rk,1:rk);
 
 
 %Plotting of the SVs
 fig1=figure('units','normalized','outerposition',[0 0 1 1])
 semilogy(SumSV,'+r')
+
 
 
 
