@@ -24,6 +24,7 @@ for k = 1:T-1
     eps_piston_removed(:,k+1) = epsk(:,k+1)-mean(epsk(:,k+1)); 
     sk(:,k+1) = awgn(G*epsk(:,k+1),SNR);
     sigma(k+1) = var(eps_piston_removed(:,k+1));
+%     sigma(k+1) = var(sk(:,k+1));
     strehl(k+1) = exp(-sigma(k+1)^2);
 end
 %strehl = mean(strehl);
