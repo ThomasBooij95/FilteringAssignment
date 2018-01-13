@@ -1,3 +1,52 @@
-Questions:
+﻿Template for a question:
+
+Question [question nr]
+summary:
+
+extra info:
+
+solution direction:
+
+
+
+Raised Questions:
 - Is s(k)   a distance measure on the SH-senor in meters or as slopes of the wavefront in degrees?
 - Is Phi(k) a distance measure of height of the wavefront in meters? Or is it another value?
+
+Question 3.1
+summary: To get an estimate of the wavefront(in meters?) we use open loop data of the slopes(in degrees?). We are asked to give the closed loop expression for the wavefront Phi(k) using the slopes s(k). Furthermore it is asked if the solution is unique. 
+
+extra info: the reference chapters 2 till 4 are about linear least-squares problems, especially 4.5.1 gives an overview about the LLS.
+
+
+Solution direction: 
+Find Phi(k) by minimizing epsilon in the equation s(k) = G*phi(k) + e(k). The solution is gives as Phi_hat = (G^t*G)^-1 *G^T*s(k).
+
+Page 118 in the book states something about uniqueness of the solution: "When P (or its square root S) is not full rank, the weighted least-squaresproblem (4.24) no longer has a unique solution." Where P is the covariance matrix of the variable  when the problem is a stochastic LLS problem. I don't think this is the case right now. 
+
+Remarks: 
+What kind of Least-squares problem is this? Since no prior statistical knowledge is assumed in this question, should we assume Phi(k) to be deterministic and therefor this problem as a linear-least-squares problem?
+
+Question 3.2
+Summary: The prior knowledge of the statistical properties of the wavefront are now also considered. Again; we are asked to give a closed loop expression of the wavefront estimate Phi(K)_hat. Prior info: E[phi(k)] = 0(The mean of the wavefront has an elevation of 0). E[phi(k)*phi(k)^T] = C_phi(0) > 0. (THe covariance matrix of the wavefront is known and is positive definite. 
+
+Extra info: 
+This is a stochastic linear least-squares problem defined on page 113. 
+
+solution direction:
+We know the that the noise is defined as eps ~ (0, sigma_e*Im). G is deterministic, (And we assume L = I??? and L is full column rank).The solution is given by Phi_hat = [M N][y x_mean]^T. With M and N chosen such that we have a unbiased minimum variance estimator. The closed form of the estimate is almost given at page 113: x = (PF^T(FPF^T +W^−1)^−1)y +
+(In - PFT(FPFT +W−1)^−1F)x_mean. However, in our case we also have to incorporate the fact that the noise variance is s_e and not 1 as assumed on page 113. 
+
+Question 3.3
+Summary: Do we know the variance of the noise sigma_e in practice? How does this knowledge affect how we can reconstruct the wavefront?
+
+Solution direction: Since we are still in open loop, this noise has to do with the sensor and not with the actuator. The equation we use is the sensor equation; this equation maps wavefront elevation to slopes with the added epsilon term. This error therefor has something to do with the confidence that the slopes measured by the sensor gives accurate information about the wavefront elevation. Hence this error could be induced by the measurement noise of the sensor, the sensor resolution etc. These values should be known from the factory that manufactured the sensor. 
+
+Question 3.4
+summary: After we have taken the statistical propreties of the wavefront into consideration, it is now time to model the temporal behaviour of the wavefront. To keep things straightforward,in this question we assume a random-walk propagation of the wavefront. This means that we model the wavefront to stay the same in the next timestep. By doing this we have an expression for phi(k+1) and enables us to study the closed loop system behaviour. this model is given by phi(k+1) = phi(k) + eta(k). Eta is a zero-mean gaussian additive white noise with C_eta = I(covariance matrix). Furthermore we assume to know some statistical properties about the residue Epsilon(k). namely that it is zero mean and has a known covarance matrix equal to C_phi(0) >0.When epsilon is zero, this implies that the wavefront is properly corrected and will therefor result in a high quality picture. Hence the goal of AO is to minimize the variance of this residue. We are now to give the optimal input command u(k) in closed form, based on the estimated residual eps(k), the past input command u(k-1) and the matrices H and C_phi.
+
+extra info: The actuator equation is given by Phi_DM(k) = H*u(k-1). We can use this expression in the given formula for the residu: eps_res = phi(k) - phi_DM(k). 
+
+solution direction:
+Use the residual equation, fill this with our expressions for phi(k) and phi_DM(k) and construct a least squares problem. The solution could lie in writing an explicit form of E[e(k)e(k)^T].
+

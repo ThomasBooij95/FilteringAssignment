@@ -19,7 +19,7 @@ end
 
 %Single value decomp
 [U,S,V] = svd(G);
-SumSV=S(1:rk,1:rk);
+SumSV=S(1:49,1:49);
 
 
 %Plotting of the SVs
