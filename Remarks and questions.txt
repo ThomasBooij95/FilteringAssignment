@@ -29,14 +29,14 @@ Remarks:
 What kind of Least-squares problem is this? Since no prior statistical knowledge is assumed in this question, should we assume Phi(k) to be deterministic and therefor this problem as a linear-least-squares problem?
 
 Question 3.2
-Summary: The prior knowledge of the statistical properties of the wavefront are now also considered. Again; we are asked to give a closed loop expression of the wavefront estimate Phi(K)_hat. Prior info: E[phi(k)] = 0(The mean of the wavefront has an elevation of 0). E[phi(k)*phi(k)^T] = C_phi(0) > 0. (THe covariance matrix of the wavefront is known and is positive definite. 
+Summary: The prior knowledge of the statistical properties of the wavefront are now also considered. Again; we are asked to give a closed loop expression of the wavefront estimate Phi(K)_hat. Prior info: E[phi(k)] = 0(The mean of the wavefront has an elevation of 0). E[phi(k)*phi(k)^T] = C_phi(0) > 0. (The covariance matrix of the wavefront is known and is positive definite. 
 
 Extra info: 
 This is a stochastic linear least-squares problem defined on page 113. 
 
 solution direction:
-We know the that the noise is defined as eps ~ (0, sigma_e*Im). G is deterministic, (And we assume L = I??? and L is full column rank).The solution is given by Phi_hat = [M N][y x_mean]^T. With M and N chosen such that we have a unbiased minimum variance estimator. The closed form of the estimate is almost given at page 113: x = (PF^T(FPF^T +W^−1)^−1)y +
-(In - PFT(FPFT +W−1)^−1F)x_mean. However, in our case we also have to incorporate the fact that the noise variance is s_e and not 1 as assumed on page 113. 
+We know the that the noise is defined as eps ~ (0, sigma_e*Im). G is deterministic, (And we assume L L^T = sigma_e I??? and L is full column rank).The solution is given by Phi_hat = [M N][s_k \bar{Phi}_k]^T. With M and N chosen such that we have a unbiased minimum variance estimator. The closed form of the estimate is almost given at page 113: \hat{x} = (CG^T(GCG^T +sigma_e I^{−1})^{−1})Phi_k +
+(In - PFT(FPFT +W−1)^−1F)x_mean. In our case as the mean of Phi is 0 the second part of the equation is 0. However, in our case we also have to incorporate the fact that the noise variance is s_e and not 1 as assumed on page 113. 
 
 Question 3.3
 Summary: Do we know the variance of the noise sigma_e in practice? How does this knowledge affect how we can reconstruct the wavefront?
@@ -49,5 +49,10 @@ summary: After we have taken the statistical propreties of the wavefront into co
 extra info: The actuator equation is given by Phi_DM(k) = H*u(k-1). We can use this expression in the given formula for the residu: eps_res = phi(k) - phi_DM(k). 
 
 solution direction:
-Use the residual equation, fill this with our expressions for phi(k) and phi_DM(k) and construct a least squares problem. The solution could lie in writing an explicit form of E[e(k)e(k)^T].
+Use the residual equation, fill this with our expressions for phi(k) and phi_DM(k) and construct a least squares problem. Plugging in the equation for Phi_DM we arrive at a weighted LS problem in the form of:
+Phi_K=H u(k-1) + e(k)
+minimum variance estimate:
+\hat{u}_{k-1}=(H^T C H)^{-1} H^T C (Hu_{k-1}+e(k))
+remaining questions: we have an index mismatch at the best estimate???
+
 
