@@ -1,6 +1,6 @@
 clear all
 close all
-clc
+%clc
 
 load turbulenceData.mat
 load systemMatrices.mat
@@ -23,11 +23,12 @@ SumSV=S(1:rk,1:rk);
 
 
 %Plotting of the SVs
-fig1=figure('units','normalized','outerposition',[0 0 1 1])
-semilogy(SumSV,'+r')
+% fig1=figure('units','normalized','outerposition',[0 0 1 1])
+% semilogy(SumSV,'+r')
 
+detrend_phi=detrend(phiIdent{1},'constant');
+C=cov(detrend_phi');
+sigma_e=1/sqrt(SNR);
 
-
-
-
-%[ sigma ] = AOloop_nocontrol(phiIdent{1},SNR,H,G)
+[ sigma ] = AOloop_nocontrol(phiIdent{1},SNR,H,G)
+[ sigma ] = AOloopMVM(G,H,C,sigma_e,phiIdent{1})

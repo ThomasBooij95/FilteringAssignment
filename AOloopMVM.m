@@ -9,35 +9,29 @@ function [ var_e ] = AOloopMVM(G,H,C,sigma_e,phik)
 % OUT
 % var_e     : variance of the residual wavefront
 
-
-
 n = size(H,1);      % dimension lifted wavefront
 ns = size(G,1);     % dimension lifted sensor slopes
 T = length(phik);   % number of temporal phase points
 
-epsk = zeros(n,T);  % residual wavefront
-eps_piston_removed = zeros(n,T); % residual wavefront with mean removed
-sk = zeros(ns,T);   % slopes measurements
-strehl = zeros(T,1);% strehl ratio
-sigma = zeros(T,1);
+%%
+epsilon=zeros(size(phik));
+sk=zeros(ns,T);
+u=zeros(n,T);
+var_e=zeros(1,T);
 
-u      = zeros(n,T) ;% Set initialvalue of the control to zero
-phi_DM = zeros(n,T);
+%% Initial values
+epsilon(:,1)=phik(:,1);
+sk(:,1) = awgn(G*epsilon(:,1),1/sigma_e^2);
+var_e(1)=var(epsilon(:,1));
+
+M=inv(H)*C*G'*inv(G*C*G'+sigma_e^2*eye(size(G,1)));
+
+
 for k = 1:T-1
-    epsk(:,k+1) = phik(:,k+1);
-    eps_piston_removed(:,k+1) = epsk(:,k+1)-mean(epsk(:,k+1)); 
-    sigma(k+1) = var(eps_piston_removed(:,k+1));
-    SNR = sigma(k+1)/sigma_e;
-    sk(:,k+1) = awgn(G*epsk(:,k+1),SNR);
-    
-    M=inv(H)*C*G'*inv(G*C*G'+sigma_e*eye(size(G,1)))
-    
-    u(:,k+1) = M*sk(:,k+1)+u(:,k);%(function that maps sk du
-    phi_DM(:,k+1) = H*u(:,k);% function that calculates the deformable mirror 
-    residual(:,k+1) = epsk(:,k+1) - phi_DM(:,k+1);
-    residual_removed(:,k+1) = residual(:,k+1) - mean(residual(:,k+1));
-    var_e(:,k+1) = var(residual_removed(:,k+1));
-    strehl(k+1) = exp(-sigma(k+1)^2);
+    u(:,k)=M*sk(:,k);
+    epsilon(:,k+1)=phik(:,k+1)-H*u(:,k);
+    sk(:,k+1) = awgn(G*epsilon(:,k+1),1/sigma_e^2);
+    var_e(k+1)=var(epsilon(:,k+1));
 end
 %strehl = mean(strehl);
 var_e = mean(var_e);
