@@ -25,16 +25,19 @@ for k = 1:T-1
     epsk(:,k+1) = phik(:,k+1);
     eps_piston_removed(:,k+1) = epsk(:,k+1)-mean(epsk(:,k+1)); 
     sigma(k+1) = var(eps_piston_removed(:,k+1));
-    SNR = sigma(k+1)/sigma_e^2;
+    SNR = sigma(k+1)/sigma_e;
     sk(:,k+1) = awgn(G*epsk(:,k+1),SNR);
-    %TODO: Define M here
+    
+    M=inv(H)*C*G'*inv(G*C*G'+sigma_e*eye(size(G,1)))
+    
     u(:,k+1) = M*sk(:,k+1)+u(:,k);%(function that maps sk du
-    phi_DM(:,k+1) = H*u(:,k+1);% function that 
+    phi_DM(:,k+1) = H*u(:,k);% function that 
     residual(:,k+1) = epsk(:,k+1) - phi_DM(:,k+1);
-    residual_removed(:,k+1) = 
+    residual_removed(:,k+1) = residual(:,k+1) - mean(residual(:,k+1));
+    var_e(:,k+1) = var(residual_removed(:,k+1));
     strehl(k+1) = exp(-sigma(k+1)^2);
 end
 %strehl = mean(strehl);
-sigma = mean(sigma);
+var_e = mean(var_e);
 
 end

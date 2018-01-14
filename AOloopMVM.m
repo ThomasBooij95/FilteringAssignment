@@ -1,12 +1,14 @@
 function [ var_e ] = AOloopMVM(G,H,C,sigma_e,phik)
 % Example of online AO simulation for open_loop measurements
 % IN
-% phik : incoming turbulence wavefront
-% SNR  : Signal to Noise Ratio for the sensor
-% H    : influence matrix mapping the wavefront on the mirror
-% G    : measurement matrix 
+% phik      : incoming turbulence wavefront
+% sigma_e   : measurement noise covariance
+% C         : variance of the wavefront
+% H         : influence matrix mapping the wavefront on the mirror
+% G         : measurement matrix 
 % OUT
-% sigma : mean variance of the residual wavefront
+% var_e     : variance of the residual wavefront
+
 
 
 n = size(H,1);      % dimension lifted wavefront
@@ -25,11 +27,13 @@ for k = 1:T-1
     epsk(:,k+1) = phik(:,k+1);
     eps_piston_removed(:,k+1) = epsk(:,k+1)-mean(epsk(:,k+1)); 
     sigma(k+1) = var(eps_piston_removed(:,k+1));
-    SNR = sigma(k+1)/sigma_e^2;
+    SNR = sigma(k+1)/sigma_e;
     sk(:,k+1) = awgn(G*epsk(:,k+1),SNR);
-    %TODO: Define M here
+    
+    M=inv(H)*C*G'*inv(G*C*G'+sigma_e*eye(size(G,1)))
+    
     u(:,k+1) = M*sk(:,k+1)+u(:,k);%(function that maps sk du
-    phi_DM(:,k+1) = H*u(:,k);% function that 
+    phi_DM(:,k+1) = H*u(:,k);% function that calculates the deformable mirror 
     residual(:,k+1) = epsk(:,k+1) - phi_DM(:,k+1);
     residual_removed(:,k+1) = residual(:,k+1) - mean(residual(:,k+1));
     var_e(:,k+1) = var(residual_removed(:,k+1));
