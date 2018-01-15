@@ -29,22 +29,47 @@ SumSV=S(1:rk,1:rk);
 %% Loop for all the data
 varnc=[];
 varMVM=[];
+varAR=[];
 
 for i=1:length(phiSim)
 
 detrend_phi=detrend(phiIdent{i},'constant');
-C=cov(detrend_phi');
+C_phi0=zeros(size(H));
+C_phi1=zeros(size(H));
+for k=1:4999
+    C_phi0 = C_phi0+...
+            detrend_phi(:,k)*detrend_phi(:,k)';  
+        C_phi1 = C_phi1+...
+            detrend_phi(:,k+1)*detrend_phi(:,k)';      
+end
+    C_phi0 = C_phi0+...
+            detrend_phi(:,5000)*detrend_phi(:,5000)';  
+     C_phi0=C_phi0/length(detrend_phi-1);
+   
+C_phi1=C_phi1/length(detrend_phi-2);
+%C_phi1=xcov(detrend_phi(:,2:end)',detrend_phi(:,1:end-1))';
+
 sigma_e=1/sqrt(SNR);
 
-[ var_nocont ] = AOloop_nocontrol(phiIdent{i},SNR,H,G);
-[ var_MVM ] = AOloopMVM(G,H,C,sigma_e,phiIdent{i});
 
+
+%% no control
+[ var_nocont ] = AOloop_nocontrol(phiIdent{i},SNR,H,G);
+%% MVM
+[ var_MVM ] = AOloopMVM(G,H,C_phi0,sigma_e,phiIdent{i});
+%% Vector auto-regressive
+[ A,C_w,K] = computeKalmanAR(C_phi0,C_phi1,G,sigma_e);
+[ var_AR ] = AOloopAR(G,H,sigma_e,A,C_w,phiIdent{i},K);
+
+%% Collect variances
 varnc(i)=var_nocont;
 varMVM(i)=var_MVM;
+varAR(i)=var_AR;
 end
 
-meannc=ones(size(varnc))*mean(varnc);
-meanMVM=(ones(size(varMVM))*mean(varMVM));
+meannc=ones(size(varnc))*mean(varnc)
+meanMVM=(ones(size(varMVM))*mean(varMVM))
+meanAR=(ones(size(varAR))*mean(varAR))
 
 %% Plot results
 fig2=figure('units','normalized','outerposition',[0 0 1 1])
@@ -53,4 +78,6 @@ hold on
 plot(meannc,'--r')
 plot(varMVM,'ko')
 plot(meanMVM,'--k')
-legend('No control','No control - mean','MVM','MVM - mean')
+plot(varAR,'mo')
+plot(meanAR,'--m')
+legend('No control','No control - mean','MVM','MVM - mean','AR','AR - mean')
