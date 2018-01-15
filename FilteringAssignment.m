@@ -17,18 +17,40 @@ else
     disp('Matrix G is NOT full rank!')
 end
 
-%Single value decomp
+%% Single value decomp
 [U,S,V] = svd(G);
 SumSV=S(1:rk,1:rk);
 
 
-%Plotting of the SVs
+%% Plotting of the SVs
 % fig1=figure('units','normalized','outerposition',[0 0 1 1])
 % semilogy(SumSV,'+r')
 
-detrend_phi=detrend(phiIdent{1},'constant');
+%% Loop for all the data
+varnc=[];
+varMVM=[];
+
+for i=1:length(phiSim)
+
+detrend_phi=detrend(phiIdent{i},'constant');
 C=cov(detrend_phi');
 sigma_e=1/sqrt(SNR);
 
-[ sigma ] = AOloop_nocontrol(phiIdent{1},SNR,H,G)
-[ sigma ] = AOloopMVM(G,H,C,sigma_e,phiIdent{1})
+[ var_nocont ] = AOloop_nocontrol(phiIdent{i},SNR,H,G);
+[ var_MVM ] = AOloopMVM(G,H,C,sigma_e,phiIdent{i});
+
+varnc(i)=var_nocont;
+varMVM(i)=var_MVM;
+end
+
+meannc=ones(size(varnc))*mean(varnc);
+meanMVM=(ones(size(varMVM))*mean(varMVM));
+
+%% Plot results
+fig2=figure('units','normalized','outerposition',[0 0 1 1])
+plot(varnc,'ro')
+hold on
+plot(meannc,'--r')
+plot(varMVM,'ko')
+plot(meanMVM,'--k')
+legend('No control','No control - mean','MVM','MVM - mean')
