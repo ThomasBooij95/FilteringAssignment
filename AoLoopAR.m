@@ -12,6 +12,7 @@ n = size(H,1);      % dimension lifted wavefront
 ns = size(G,1);     % dimension lifted sensor slopes
 T = length(phik);   % number of temporal phase points
 
+
 %%
 epsilon=zeros(size(phik));
 sk=zeros(ns,T);
@@ -51,6 +52,7 @@ end
 % end
 % var_e = var(detrend(eps,'constant'));
 % var_eps = mean(var_e);
+
 
 
 var_e = mean(var_e);
