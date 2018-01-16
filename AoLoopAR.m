@@ -31,14 +31,15 @@ for k = 1:T-1
     SNR = sigma(k+1)/sigma_e^2;
     sk(:,k+1) = awgn(G*epsk(:,k+1),SNR);
     
-    u(:,k) = inv(H'*H)*H'*[A-K*C , A*H , K ] [
+    u(:,k) = inv(H'*H)*H'*[A-K*C , A*H , K ]*[epsk(:,k);u(:,k-1); sk(:,k)];  
     phi_DM(:,k+1) = H*u(:,k);% function that 
     residual(:,k+1) = epsk(:,k+1) - phi_DM(:,k+1);
     residual_removed(:,k+1) = residual(:,k+1) - mean(residual(:,k+1));
     var_e(:,k+1) = var(residual_removed(:,k+1));
     strehl(k+1) = exp(-sigma(k+1)^2);
 end
-%strehl = mean(strehl);
+    
+   %strehl = mean(strehl);
 var_e = mean(var_e);
 
 end
