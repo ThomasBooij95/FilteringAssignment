@@ -1,5 +1,4 @@
 function [ A,C_w,K] = computeKalmanAR(C_phi0,C_phi1,G,sigma_e)
-%B = [A*H -H]
 
 C = G;
 A = C_phi1*pinv(C_phi0);

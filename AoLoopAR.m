@@ -4,7 +4,7 @@ function [ var_e ] = AOloopAR(G,H,sigma_e,A,C_w,phik,K)
 % phik : incoming turbulence wavefront
 % SNR  : Signal to Noise Ratio for the sensor
 % H    : influence matrix mapping the wavefront on the mirror
-% G    : measurement matrix 
+% G    : measurement matrix
 % OUT
 % sigma : mean variance of the residual wavefront
 
@@ -24,7 +24,7 @@ var_e=zeros(1,T);
 epsilon(:,1)=phik(:,1);
 sk(:,1) = awgn(G*phik(:,1),1/sigma_e^2);
 var_e(1)=var(epsilon(:,1));
-u(:,1) = inv(H'*H)*H'*([A-K*G , K ]*[epsilon(:,1); sk(:,1)]);  
+u(:,1) = inv(H'*H)*H'*([A-K*G , K ]*[epsilon(:,1); sk(:,1)]);
 
 for k = 2:T
     epsilon(:,k)=phik(:,k)-H*u(:,k-1);

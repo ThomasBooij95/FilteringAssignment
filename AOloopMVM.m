@@ -5,7 +5,7 @@ function [ var_e ] = AOloopMVM(G,H,C,sigma_e,phik)
 % sigma_e   : measurement noise covariance
 % C         : variance of the wavefront
 % H         : influence matrix mapping the wavefront on the mirror
-% G         : measurement matrix 
+% G         : measurement matrix
 % OUT
 % var_e     : variance of the residual wavefront
 
@@ -21,9 +21,9 @@ var_e=zeros(1,T);
 
 %% Initial values
 epsilon(:,1)=phik(:,1);
- sk(:,1) = awgn(G*phik(:,1),1/sigma_e^2);
- var_e(1)=var(epsilon(:,1));
-    
+sk(:,1) = awgn(G*phik(:,1),1/sigma_e^2);
+var_e(1)=var(epsilon(:,1));
+
 M=inv(H)*C*G'*inv(G*C*G'+sigma_e^2*eye(size(G,1)));
 
 for k = 1:T-1
