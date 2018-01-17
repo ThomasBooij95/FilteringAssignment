@@ -1,13 +1,4 @@
 function [ var_e ] = AOloopMVM(G,H,C,sigma_e,phik)
-% Example of online AO simulation for open_loop measurements
-% IN
-% phik      : incoming turbulence wavefront
-% sigma_e   : measurement noise covariance
-% C         : variance of the wavefront
-% H         : influence matrix mapping the wavefront on the mirror
-% G         : measurement matrix
-% OUT
-% var_e     : variance of the residual wavefront
 
 n = size(H,1);      % dimension lifted wavefront
 ns = size(G,1);     % dimension lifted sensor slopes

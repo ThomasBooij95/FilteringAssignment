@@ -83,7 +83,8 @@ for i=1:length(phiIdent)
     %% N4SID
 
     phiasd=awgn(phiIdent{i},SNR);
-    [A,C,K,vaf] = n4sid([phiasd,phiSim{i}],phiSim{i},length(phiIdent{i}),length(phiSim{i}),s,n);
+    [A,C,K,vaf] = n4sid([phiasd,phiSim{i}],phiSim{i},...
+        length(phiIdent{i}),length(phiSim{i}),s,n);
     vaf
     [var_SID] = phiSid(G,H,A,K,C,SNR,0,phiIdent{i})
     
@@ -123,7 +124,8 @@ xlabel('Simulation #')
 ylabel('Variance')
 ylim([0,11])
 title('Performance comparison of the different control methods in terms of the mean variance of the wavefront residuals')
-legend('No control','No control - mean','MVM','MVM - mean','AR','AR - mean','SID','SID - mean')
+legend('No control','No control - mean','MVM','MVM - mean'...
+    ,'AR','AR - mean','SID','SID - mean')
 
 fig1=figure('units','normalized','outerposition',[0 0 1 1])
 plot(var63,'ro')
