@@ -26,8 +26,12 @@ R32 = R(size(R,1)/2 + 1:end,1:size(R,1)/2);
 
 %Singular value decomposition
     [~, S, V] = svd(R32*pinv(R22)*Yh0);
+    
+    %% SVD to see the order
 %     fig1=figure('units','normalized','outerposition',[0 0 1 1])
 %     semilogy(S,'+r')
+
+
     V = V(:,1:n);
     S = S(1:n,1:n);
     Xs = sqrtm(S)*V';
@@ -60,8 +64,8 @@ R32 = R(size(R,1)/2 + 1:end,1:size(R,1)/2);
     for j=Nid+1:Nid+Nval
         Xval(:,j+1-Nid)=(A-K*C)*Xval(:,j-Nid)+K*phiPrep(:,j);
         phiSim(:,j+1-Nid)=C*Xval(:,j+1-Nid);
-        num=num+norm(phiValid(:,j-Nid)-phiSim(:,j-Nid));
-        den=den+norm(phiValid(:,j-Nid));
+        num=num+norm(phiValid(:,j-Nid)-phiSim(:,j-Nid))^2;
+        den=den+norm(phiValid(:,j-Nid))^2;
     end
     
     VAF=100*max(0,1-num/den);
